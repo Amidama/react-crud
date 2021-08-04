@@ -5,6 +5,7 @@ import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import { Link } from "react-router-dom";
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -50,9 +51,11 @@ export default function SimplePaper() {
                   </Typography>
                 </Box>
                 <Box>
-                  <Button variant="contained" color="primary">
-                    Create
-                  </Button>
+                  <Link to="/create">
+                    <Button variant="contained" color="primary">
+                      Create
+                    </Button>
+                  </Link>
                 </Box>
               </Box>
               <TableContainer component={Paper}>
@@ -61,8 +64,9 @@ export default function SimplePaper() {
                     <TableRow>
                       <TableCell align="center">ID</TableCell>
                       <TableCell align="center">Avartar</TableCell>
-                      <TableCell align="center">Fullname</TableCell>
+                      <TableCell align="center">Firstname</TableCell>
                       <TableCell align="center">Lastname</TableCell>
+                      <TableCell align="center">Email</TableCell>
                       <TableCell align="center">Action</TableCell>
                     </TableRow>
                   </TableHead>
@@ -75,7 +79,7 @@ export default function SimplePaper() {
                         <TableCell align="center"><img src={user.avatar} width="50px"/></TableCell>
                         <TableCell align="center">{user.fname}</TableCell>
                         <TableCell align="center">{user.lname}</TableCell>
-                        <TableCell align="center">{user.lname}</TableCell>
+                        <TableCell align="center">{user.username}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
