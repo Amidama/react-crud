@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import EditIcon from '@material-ui/icons/Edit';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { useParams } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -29,26 +30,41 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function UserCreate() {
+export default function UserUpdate() {
   const classes = useStyles();
 
+  const { id } = useParams()
   const [fname, setFname] = useState(''); 
   const [lname, setLname] = useState(''); 
   const [username, setUsername] = useState(''); 
   const [email, setEmail] = useState(''); 
   const [avatar, setAvatar] = useState(''); 
 
+  useEffect(() => fetch("https://www.mecallapi.com/api/users/" + id)
+    .then(res => res.json())
+    .then(
+      (result) => {
+        setFname(result.user.fname)
+        setLname(result.user.lname)
+        setUsername(result.user.username)
+        setEmail(result.user.email)
+        setAvatar(result.user.avatar)
+      },
+    ), [id]
+  );
+
   const handleSubmit = event => {
         event.preventDefault()
         const data = {
+            'id': id,
             'fname': fname,
             'lname': lname,
             'username': username,
             'email': email,
             'avatar': avatar,
         }
-        fetch("https://www.mecallapi.com/api/users/create", {
-            method: 'POST',
+        fetch("https://www.mecallapi.com/api/users/update", {
+            method: 'PUT',
             headers: {
                 'Accept': 'application/from-data',
                 'Content-Type': 'application/json'
@@ -69,10 +85,10 @@ export default function UserCreate() {
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
-          <PersonAddIcon />
+          <EditIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Create User
+          Edit User (ID:{id})
         </Typography>
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
@@ -86,6 +102,7 @@ export default function UserCreate() {
                 onChange={(e) => setFname(e.target.value)}
                 label="First Name"
                 autoFocus
+                value={fname}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -97,6 +114,7 @@ export default function UserCreate() {
                 onChange={(e) => setLname(e.target.value)}
                 label="Last Name"
                 name="lname"
+                value={lname}
               />
             </Grid>
             <Grid item xs={12}>
@@ -105,9 +123,10 @@ export default function UserCreate() {
                 required
                 fullWidth
                 id="username"
-                onChange={(e) => setUsername(e.target.value)}
                 label="Username"
                 name="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </Grid>
             <Grid item xs={12}>
@@ -119,6 +138,7 @@ export default function UserCreate() {
                 onChange={(e) => setEmail(e.target.value)}
                 label="Email Address"
                 name="email"
+                value={email}
               />
             </Grid>
             <Grid item xs={12}>
@@ -130,6 +150,7 @@ export default function UserCreate() {
                 label="Avatar"
                 id="avatar"
                 onChange={(e) => setAvatar(e.target.value)}
+                value={avatar}
               />
             </Grid>
           </Grid>
